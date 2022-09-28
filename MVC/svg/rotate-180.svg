@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   width="192"
+   height="192"
+   fill="#868e96"
+   viewBox="0 0 256 256"
+   version="1.1"
+   id="svg43408"
+   sodipodi:docname="rotate-180.svg"
+   inkscape:version="1.2.1 (9c6d41e410, 2022-07-14)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs43412" />
+  <sodipodi:namedview
+     id="namedview43410"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     showgrid="false"
+     inkscape:zoom="4.0729167"
+     inkscape:cx="96.122762"
+     inkscape:cy="96"
+     inkscape:window-width="1920"
+     inkscape:window-height="1011"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg43408" />
+  <rect
+     width="256"
+     height="256"
+     fill="none"
+     id="rect43398" />
+  <path
+     d="m 65.8,65.8 c 34.33743,-34.387548 90.06257,-34.387548 124.4,0"
+     fill="none"
+     stroke="#868e96"
+     stroke-linecap="round"
+     stroke-linejoin="round"
+     stroke-width="16"
+     id="path43402"
+     sodipodi:nodetypes="cc" />
+  <path
+     d="m 190.2,190.2 c -34.33743,34.38755 -90.06257,34.38755 -124.4,0"
+     fill="none"
+     stroke="#868e96"
+     stroke-linecap="round"
+     stroke-linejoin="round"
+     stroke-width="16"
+     id="path43406"
+     sodipodi:nodetypes="cc" />
+  <path
+     sodipodi:type="star"
+     style="fill:#868e96;fill-opacity:1;stroke-width:3.10929;paint-order:markers fill stroke"
+     id="path11721-6"
+     inkscape:flatsided="true"
+     sodipodi:sides="3"
+     sodipodi:cx="40.264244"
+     sodipodi:cy="100.83777"
+     sodipodi:r1="34.825283"
+     sodipodi:r2="17.41264"
+     sodipodi:arg1="0.49835327"
+     sodipodi:arg2="1.5455508"
+     inkscape:rounded="0.02"
+     inkscape:randomized="0"
+     d="m 70.853758,117.48355 c -0.576627,1.05965 -59.670567,2.55182 -60.299939,1.52262 -0.6293722,-1.02919 27.625338,-52.952135 28.831337,-52.982587 1.205998,-0.03045 32.045228,50.400317 31.468602,51.459967 z"
+     inkscape:transform-center-x="4.2955974"
+     inkscape:transform-center-y="-0.35000052"
+     transform="matrix(-0.55091793,0.36912848,-0.41750775,-0.62312316,260.71398,122.63202)" />
+  <path
+     sodipodi:type="star"
+     style="fill:#868e96;fill-opacity:1;stroke-width:3.10929;paint-order:markers fill stroke"
+     id="path11721-6-3"
+     inkscape:flatsided="true"
+     sodipodi:sides="3"
+     sodipodi:cx="40.264244"
+     sodipodi:cy="100.83777"
+     sodipodi:r1="34.825283"
+     sodipodi:r2="17.41264"
+     sodipodi:arg1="0.49835327"
+     sodipodi:arg2="1.5455508"
+     inkscape:rounded="0.02"
+     inkscape:randomized="0"
+     d="m 70.853758,117.48355 c -0.576627,1.05965 -59.670567,2.55182 -60.299939,1.52262 -0.6293722,-1.02919 27.625338,-52.952135 28.831337,-52.982587 1.205998,-0.03045 32.045228,50.400317 31.468602,51.459967 z"
+     inkscape:transform-center-x="-4.2955977"
+     inkscape:transform-center-y="0.35000097"
+     transform="matrix(0.55091793,-0.36912848,0.41750775,0.62312316,-4.5537235,133.03218)" />
+  <text
+     xml:space="preserve"
+     style="font-size:85.805px;font-family:sans-serif;-inkscape-font-specification:sans-serif;fill:#868e96;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:5.39751;stroke-linecap:butt;stroke-linejoin:miter;stroke-dasharray:none;paint-order:markers fill stroke"
+     x="57.889626"
+     y="152.127"
+     id="text1999"
+     transform="scale(0.92746311,1.07821)"><tspan
+       sodipodi:role="line"
+       id="tspan1997"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:sans-serif;-inkscape-font-specification:'sans-serif Bold';fill:#868e96;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:5.39751;stroke-linecap:butt;stroke-linejoin:miter;stroke-dasharray:none;paint-order:markers fill stroke"
+       x="57.889626"
+       y="152.127">180</tspan></text>
+</svg>
