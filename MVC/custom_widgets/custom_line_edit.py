@@ -1,4 +1,7 @@
-from PyQt6.QtCore import Qt
+import re
+
+from PyQt6.QtCore import Qt, QRegularExpression
+from PyQt6.QtGui import QRegularExpressionValidator
 from PyQt6.QtWidgets import (
     QLineEdit,
     QFrame,
@@ -21,6 +24,11 @@ class CustomLineEdit(QFrame):
         self.lineEdit.setProperty('class', 'renameInput')
         self.lineEdit.setFixedHeight(36)
         self.lineEdit.setMaxLength(32)
+        pathValidator = QRegularExpressionValidator()
+        regex = QRegularExpression()
+        regex.setPattern(r'[^\\/:*?"<>|]*')
+        pathValidator.setRegularExpression(regex)
+        self.lineEdit.setValidator(pathValidator)
 
         self.button = QPushButton(buttonText)
         self.button.setFixedHeight(36)

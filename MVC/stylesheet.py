@@ -30,14 +30,16 @@ def get_stylesheet():
             border: 1px solid #343a40;
             border-radius: 5;
         }
-        .renameDiv::disabled {
-            color: #868e96;
-            background-color: #dee2e6
-        }
         .renameInput {
+            color: #495057;
+            background-color: #e9ecef;
             border-bottom-left-radius: 5;
             border-top-left-radius: 5;
             padding: 5;
+        }
+        .renameInput:disabled {
+            color: #495057;
+            background-color: #e9ecef;
         }
         .renameBtn {
             color: #087f57;
