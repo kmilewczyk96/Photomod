@@ -13,7 +13,7 @@ if __name__ == '__main__':
     app = QApplication([])
     id_ = QFontDatabase.addApplicationFont('resources/fonts/Roboto/Roboto-Medium.ttf')
     customFonts = QFontDatabase.applicationFontFamilies(id_)
-    font = QFont(customFonts[0], 11)
+    font = QFont(customFonts[0], 10)
     app.setFont(font)
     app.setStyleSheet(stylesheet.get_stylesheet())
     model = Model()
