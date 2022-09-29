@@ -37,6 +37,7 @@ class Model:
             return lastIndex.split(self.prefix)[-1].split('.')[0]
 
     def runOperations(self):
+        print('Rozpoczynam pracę...')
         if not isinstance(self.firstIndex, int) and self.rename:
             self.firstIndex = self.checkExistingPrefixes()
 
@@ -46,12 +47,14 @@ class Model:
                 original.load()
 
             if self.resolution:
+                print('Zmieniam rozdzielczość...')
                 max_ = self.resolutions[self.resolutionIndex]
                 originalSize = max(original.size)
                 if originalSize > max_:
                     original.thumbnail(size=(max_, max_), resample=Image.LANCZOS)
 
             if self.rotate:
+                print('Obracam...')
                 original = original.rotate(self.rotateValues[self.rotateIndex], expand=True)
 
             if self.rename:
@@ -61,5 +64,8 @@ class Model:
             else:
                 newName = os.path.basename(img)
 
+            print('Zapisuję...')
             original.save(os.path.join(self.targetPath, newName), quality=95, subsampling=0)
             original.close()
+
+        print('Zakończono =).')

@@ -7,13 +7,10 @@ def get_stylesheet():
         QLabel {
             color: #e9ecef;
         }
-        .rounded {
+        .section {
             background-color: #495057;
             border: 1px solid #868e96;
             border-radius: 5;
-        }
-        QPushButton {
-            background-color: #eee;
         }
         .toggle-slider {
             color: #e9ecef;
@@ -151,5 +148,22 @@ def get_stylesheet():
         }
         #resolution-4k::indicator:unchecked:hover {
             image: url(MVC/svg/resolution-4k--hover.svg);
+        }
+        
+        #submitBtn {
+            color: #087f57;
+            background-color: #63e6be;
+            border: 2px solid #087f57;
+            border-radius: 5;
+        }
+        #submitBtn:disabled {
+            color: #495057;
+            background-color: #868e96;
+            border: none;
+            border-radius: 5;
+        }
+        #submitBtn:hover {
+            color: #087f57;
+            background-color: #38d9a9;
         }
     """

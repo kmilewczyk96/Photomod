@@ -10,7 +10,7 @@ from PyQt6.QtWidgets import (
 class Div(QFrame):
     def __init__(self, sectionName: str):
         super().__init__()
-        self.setProperty('class', 'rounded')
+        self.setProperty('class', 'section')
         self.setContentsMargins(12, 4, 12, 4)
         self.layout = QVBoxLayout()
 

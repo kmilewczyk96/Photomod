@@ -1,3 +1,4 @@
+import sys
 from functools import partial
 
 from PyQt6.QtWidgets import QFileDialog, QLineEdit, QButtonGroup
@@ -63,8 +64,6 @@ class Controller:
             self._view.renameTipBox.setHidden(False)
         else:
             self._view.renameTipBox.setHidden(True)
-            # self._view.renameTipBox.info.setText('')
-            # self._view.renameTipBox.details.setText('')
 
     def _toggleRotate(self, button):
         toggle = button.isChecked()
@@ -91,13 +90,14 @@ class Controller:
         if path:
             # Styling:
             limit = 40
-            shortPath = path if len(path) <= 40 else getShortenedPath(path=path, limit=limit)
-            self._view.targetDirButton.setText(shortPath)
+            strPath = path if len(path) <= 40 else getShortenedPath(path=path, limit=limit)
+            self._view.targetDirButton.setText(strPath.replace('/', '\\') if sys.platform == 'win32' else strPath)
             self._view.targetDirButton.pseudoCheck()
             self._view.targetDirButton.checked = True
 
             # Operation:
             self._model.targetPath = path
+            self._checkFilesSelected()
 
     def _launchFilesSelect(self):
         files, _ = QFileDialog.getOpenFileNames(directory='/home/Karol/Pictures', filter='jpg(*.jpg *.JPG)')
@@ -111,6 +111,7 @@ class Controller:
 
             # Operation:
             self._model.files = files
+            self._checkFilesSelected()
 
     def _updatePrefix(self, lineEdit: QLineEdit):
         print('edited!')
@@ -130,6 +131,22 @@ class Controller:
         self._view.renameTipBox.details.setText(
             f'{self._model.prefix}{str(self._model.firstIndex + 1).zfill(5)}.jpg'
         )
+
+    def _checkFilesSelected(self):
+        """If all files have been selected, enable access to operations div."""
+        valuesRequired = (
+            self._model.targetPath,
+            self._model.files
+        )
+        for value in valuesRequired:
+            if not value:
+                return False
+
+        # Set enabled and remove opacity effect:
+        self._view.operationsDiv.graphicsEffect().setEnabled(False)
+        self._view.operationsDiv.setEnabled(True)
+        self._view.submitBtn.graphicsEffect().setEnabled(False)
+        self._view.submitBtn.setEnabled(True)
 
     @staticmethod
     def __signalTest():

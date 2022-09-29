@@ -4,8 +4,8 @@ from PyQt6.QtWidgets import (
 )
 
 
-def addOpacityEffect(element: QWidget, initialToggle=True):
+def addOpacityEffect(element: QWidget, level=0.2, initialToggle=True):
     opacity = QGraphicsOpacityEffect()
-    opacity.setOpacity(0.2)
+    opacity.setOpacity(level)
     element.setGraphicsEffect(opacity)
     opacity.setEnabled(initialToggle)

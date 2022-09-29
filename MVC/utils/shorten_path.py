@@ -9,8 +9,7 @@ def getShortenedPath(path: str, limit: int) -> str:
         if len(path) < limit:
             return path
 
-    delimiter = '\\' if isWindows else '/'
-    pathItems = path.split(delimiter)
+    pathItems = path.split('/')
     first = pathItems.pop(0)
     pathLen = len(first) + 1
 
@@ -25,4 +24,4 @@ def getShortenedPath(path: str, limit: int) -> str:
     shortenedPath.append('...')
     shortenedPath.append(first)
 
-    return delimiter.join(shortenedPath[::-1])
+    return '/'.join(shortenedPath[::-1])

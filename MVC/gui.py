@@ -73,24 +73,31 @@ class GUI(QMainWindow):
         self.mainLayout.addWidget(div)
 
     def _createOperations(self):
-        div = Div('Operacje:')
+        self.operationsDiv = Div('Operacje:')
+        self.operationsDiv.setEnabled(False)
+        addOpacityEffect(element=self.operationsDiv)
 
+        operationGroup = QButtonGroup(parent=self.operationsDiv)
+        operationGroup.setExclusive(False)
+        operationGroupDivs = []
         self.renameDiv = self._createRenameDiv()
-        div.layout.addWidget(self.renameDiv)
-        div.layout.addSpacing(self.marginXL)
+        self.operationsDiv.layout.addWidget(self.renameDiv)
+        self.operationsDiv.layout.addSpacing(self.marginXL)
+        operationGroupDivs.append(self.renameDiv)
 
         self.rotateDiv = self._createRotateDiv()
-        div.layout.addWidget(self.rotateDiv)
-        div.layout.addSpacing(self.marginXL)
+        self.operationsDiv.layout.addWidget(self.rotateDiv)
+        self.operationsDiv.layout.addSpacing(self.marginXL)
+        operationGroupDivs.append(self.rotateDiv)
 
         self.resolutionDiv = self._createResolutionDiv()
-        div.layout.addWidget(self.resolutionDiv)
+        self.operationsDiv.layout.addWidget(self.resolutionDiv)
+        self.operationsDiv.layout.addSpacing(self.marginXL)
+        operationGroupDivs.append(self.resolutionDiv)
 
-        self.mainLayout.addWidget(div)
-        self.toggleableItems = [self.renameDiv, self.rotateDiv, self.resolutionDiv]
-        # x = QGraphicsOpacityEffect()
-        # x.setOpacity(0.5)
-        # div.setGraphicsEffect(x)
+        self.mainLayout.addWidget(self.operationsDiv)
+        for id_, div in enumerate(operationGroupDivs):
+            operationGroup.addButton(div.toggleButton, id=id_)
 
     def _createRenameDiv(self):
         renameDiv = OperationDiv('Zmień nazwę:')
@@ -151,11 +158,13 @@ class GUI(QMainWindow):
 
     def _createButtons(self):
         div = QHBoxLayout()
-        div.setContentsMargins(0, 50, 0, 20)
+        div.setContentsMargins(0, 24, 0, 24)
         self.submitBtn = QPushButton('Wykonaj')
-        self.submitBtn.setProperty('class', 'btn-submit')
-        self.submitBtn.setStyleSheet('background-color: #087f5b; color: #f8f9fa;')
+        self.submitBtn.setObjectName('submitBtn')
         self.submitBtn.setFixedSize(200, 40)
         self.submitBtn.setCursor(Qt.CursorShape.PointingHandCursor)
         div.addWidget(self.submitBtn, stretch=False, alignment=Qt.AlignmentFlag.AlignCenter)
         self.mainLayout.addLayout(div)
+
+        addOpacityEffect(element=self.submitBtn, level=0.15)
+        self.submitBtn.setEnabled(False)
