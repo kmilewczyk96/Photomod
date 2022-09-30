@@ -123,7 +123,7 @@ class Controller:
         worker = self._model.worker
         thread.started.connect(partial(self._switchToProgressBar, len(self._model.files)))
         thread.started.connect(worker.run)
-        self._view.abortBtn.clicked.connect(worker.canceled)
+        # self._view.abortBtn.clicked.connect(worker.canceled)
         worker.finished.connect(thread.quit)
         worker.finished.connect(worker.deleteLater)
         thread.finished.connect(thread.deleteLater)
