@@ -43,7 +43,7 @@ class Controller:
 
         # Execute button:
         self._view.submitBtn.clicked.connect(self._executeOperations)
-        self._view.confirmBtn.clicked.connect(self._switchToExecution)
+        self._view.continueBtn.clicked.connect(self._switchToExecution)
 
     @staticmethod
     def _toggleEffects(widgets: list, toggle: bool):
@@ -123,6 +123,7 @@ class Controller:
         worker = self._model.worker
         thread.started.connect(partial(self._switchToProgressBar, len(self._model.files)))
         thread.started.connect(worker.run)
+        self._view.abortBtn.clicked.connect(worker.canceled)
         worker.finished.connect(thread.quit)
         worker.finished.connect(worker.deleteLater)
         thread.finished.connect(thread.deleteLater)
@@ -163,16 +164,15 @@ class Controller:
         self._view.submitBtn.setEnabled(False)
         self._view.submitBtn.hide()
         self._view.progressBar.setMaximum(maxValue)
-        self._view.progressBar.show()
+        self._view.progressDiv.show()
 
     def _switchToConfirmation(self):
-        self._view.progressBar.hide()
-        self._view.confirmBtn.setEnabled(True)
-        self._view.confirmBtn.show()
+        self._view.progressDiv.barFilled(bool_=True)
 
     def _switchToExecution(self):
-        self._view.confirmBtn.setEnabled(False)
-        self._view.confirmBtn.hide()
+        self._view.progressBar.reset()
+        self._view.progressDiv.barFilled(bool_=False)
+        self._view.progressDiv.hide()
         self._view.submitBtn.setEnabled(True)
         self._view.submitBtn.show()
 

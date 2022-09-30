@@ -155,7 +155,7 @@ def get_stylesheet():
         .submitBtn {
             color: #087f57;
             background-color: #63e6be;
-            border: 2px solid #087f57;
+            border: 1px solid #087f57;
             border-radius: 5;
         }
         .submitBtn:disabled {
@@ -168,4 +168,46 @@ def get_stylesheet():
             color: #087f57;
             background-color: #38d9a9;
         }
+        
+        #progressDiv {
+            border-radius: 5;
+        }
+        
+        #progressBar {
+            color: #087f57;
+            text-align: center;
+            background-color: #dee2e6;
+            border-top-left-radius: 5;
+            border-bottom-left-radius: 5;   
+        }
+        #progressBar:chunk {
+            background: qlineargradient( x1:0 y1:0, x2:0 y2:1, stop:0 #63e6be, stop:1 #96f2d7);
+            border-right: 1px solid #087f57;
+            border-top-left-radius: 5;
+            border-bottom-left-radius: 5;
+        }
+        
+        .progressBtn {
+            border-top-right-radius: 5;
+            border-bottom-right-radius: 5;
+        }
+        #abortBtn {
+            border-left: 1px solid #a61e4d;
+            color: #a61e4d;
+            background-color: #f783ac;
+        }
+        #abortBtn:hover {
+            border-left: 1px solid #a61e4d;
+            color: #a61e4d;
+            background-color: #f06595;
+        }
+        #continueBtn {
+            color: #087f5b;
+            background-color: #63e6be;
+        }
+        #continueBtn:hover {
+            color: #087f5b;
+            background-color: #38d9a9;
+        }
+        
     """

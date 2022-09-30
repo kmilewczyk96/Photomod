@@ -54,3 +54,5 @@ class ImageWorker(QObject):
 
         self.currentOperation.emit('Zakończono')
         self.finished.emit()
+
+

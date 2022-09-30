@@ -36,6 +36,7 @@ from .custom_widgets.custom_line_edit import CustomLineEdit
 from .custom_widgets.div import Div
 from .custom_widgets.file_push_button import FilePushButton
 from .custom_widgets.operation_div import OperationDiv
+from .custom_widgets.progress_div import ProgressDiv
 from .custom_widgets.select_button import SelectButton
 from .custom_widgets.tip_box import TipBox
 from .utils.graphic_effects_handler import addOpacityEffect
@@ -59,7 +60,7 @@ class GUI(QMainWindow):
         self.setCentralWidget(central)
         self._createPickFolder()
         self._createOperations()
-        self._createButtons()
+        self._createExecutionDiv()
 
     def _createPickFolder(self):
         self.filesDiv = Div('Pliki:')
@@ -158,30 +159,22 @@ class GUI(QMainWindow):
 
         return resolutionDiv
 
-    def _createButtons(self):
+    def _createExecutionDiv(self):
         div = QHBoxLayout()
         div.setAlignment(Qt.AlignmentFlag.AlignHCenter)
         div.setContentsMargins(0, 24, 0, 24)
-        itemsSize = (300, 40)
-
-        self.progressBar = QProgressBar()
-        self.progressBar.setFixedSize(*itemsSize)
-        self.progressBar.hide()
-        div.addWidget(self.progressBar)
-
-        self.confirmBtn = QPushButton('Zakończono.')
-        self.confirmBtn.setProperty('class', 'submitBtn')
-        self.confirmBtn.setCursor(Qt.CursorShape.PointingHandCursor)
-        self.confirmBtn.setFixedSize(*itemsSize)
-        self.confirmBtn.setEnabled(False)
-        self.confirmBtn.hide()
-        div.addWidget(self.confirmBtn)
 
         self.submitBtn = QPushButton('Wykonaj')
-        self.submitBtn.setProperty('class', 'submitBtn')
         self.submitBtn.setCursor(Qt.CursorShape.PointingHandCursor)
-        self.submitBtn.setFixedSize(*itemsSize)
+        self.submitBtn.setProperty('class', 'submitBtn')
+        self.submitBtn.setFixedSize(206, 38)
         div.addWidget(self.submitBtn)
+
+        self.progressDiv = ProgressDiv(parent=self, abortText='Przerwij', continueText='Kontynuuj')
+        self.progressBar = self.progressDiv.bar
+        self.continueBtn = self.progressDiv.continueBtn
+        self.abortBtn = self.progressDiv.abortBtn
+        div.addWidget(self.progressDiv)
 
         self.mainLayout.addLayout(div)
         addOpacityEffect(element=self.submitBtn, level=0.15)
