@@ -1,15 +1,17 @@
 import os
 import sys
+import time
 
 from PyQt6.QtCore import (
     Qt,
-    QPoint
+    QPoint,
 )
 from PyQt6.QtGui import QIcon, QFont
 from PyQt6.QtWidgets import (
     QApplication,
     QButtonGroup,
     QCheckBox,
+    QProgressDialog,
     QFileDialog,
     QFormLayout,
     QFrame,
@@ -19,7 +21,7 @@ from PyQt6.QtWidgets import (
     QLineEdit,
     QMainWindow,
     QPushButton,
-    QRadioButton,
+    QProgressBar,
     QSlider,
     QSpinBox,
     QToolButton,
@@ -60,7 +62,7 @@ class GUI(QMainWindow):
         self._createButtons()
 
     def _createPickFolder(self):
-        div = Div('Pliki:')
+        self.filesDiv = Div('Pliki:')
         # Section items:
         form = QFormLayout()
         form.setVerticalSpacing(self.marginS)
@@ -69,8 +71,8 @@ class GUI(QMainWindow):
         self.chooseFilesButton = FilePushButton('Wybierz')
         form.addRow('Folder docelowy:', self.targetDirButton)
         form.addRow('Pliki do edycji:', self.chooseFilesButton)
-        div.layout.addLayout(form, stretch=False)
-        self.mainLayout.addWidget(div)
+        self.filesDiv.layout.addLayout(form, stretch=False)
+        self.mainLayout.addWidget(self.filesDiv)
 
     def _createOperations(self):
         self.operationsDiv = Div('Operacje:')
@@ -158,13 +160,29 @@ class GUI(QMainWindow):
 
     def _createButtons(self):
         div = QHBoxLayout()
+        div.setAlignment(Qt.AlignmentFlag.AlignHCenter)
         div.setContentsMargins(0, 24, 0, 24)
-        self.submitBtn = QPushButton('Wykonaj')
-        self.submitBtn.setObjectName('submitBtn')
-        self.submitBtn.setFixedSize(200, 40)
-        self.submitBtn.setCursor(Qt.CursorShape.PointingHandCursor)
-        div.addWidget(self.submitBtn, stretch=False, alignment=Qt.AlignmentFlag.AlignCenter)
-        self.mainLayout.addLayout(div)
+        itemsSize = (300, 40)
 
+        self.progressBar = QProgressBar()
+        self.progressBar.setFixedSize(*itemsSize)
+        self.progressBar.hide()
+        div.addWidget(self.progressBar)
+
+        self.confirmBtn = QPushButton('Zakończono.')
+        self.confirmBtn.setProperty('class', 'submitBtn')
+        self.confirmBtn.setCursor(Qt.CursorShape.PointingHandCursor)
+        self.confirmBtn.setFixedSize(*itemsSize)
+        self.confirmBtn.setEnabled(False)
+        self.confirmBtn.hide()
+        div.addWidget(self.confirmBtn)
+
+        self.submitBtn = QPushButton('Wykonaj')
+        self.submitBtn.setProperty('class', 'submitBtn')
+        self.submitBtn.setCursor(Qt.CursorShape.PointingHandCursor)
+        self.submitBtn.setFixedSize(*itemsSize)
+        div.addWidget(self.submitBtn)
+
+        self.mainLayout.addLayout(div)
         addOpacityEffect(element=self.submitBtn, level=0.15)
         self.submitBtn.setEnabled(False)

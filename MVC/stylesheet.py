@@ -152,19 +152,19 @@ def get_stylesheet():
             image: url(MVC/svg/resolution-4k--hover.svg);
         }
         
-        #submitBtn {
+        .submitBtn {
             color: #087f57;
             background-color: #63e6be;
             border: 2px solid #087f57;
             border-radius: 5;
         }
-        #submitBtn:disabled {
+        .submitBtn:disabled {
             color: #495057;
             background-color: #868e96;
             border: none;
             border-radius: 5;
         }
-        #submitBtn:hover {
+        .submitBtn:hover {
             color: #087f57;
             background-color: #38d9a9;
         }

@@ -43,6 +43,7 @@ class Controller:
 
         # Execute button:
         self._view.submitBtn.clicked.connect(self._executeOperations)
+        self._view.confirmBtn.clicked.connect(self._switchToExecution)
 
     @staticmethod
     def _toggleEffects(widgets: list, toggle: bool):
@@ -79,14 +80,12 @@ class Controller:
 
     def _selectRotateIndex(self, group: QButtonGroup):
         self._model.rotateIndex = group.checkedId()
-        print(f'Rotate counter-clockwise: {self._model.rotateValues[self._model.rotateIndex]}')
 
     def _selectResolutionIndex(self, group: QButtonGroup):
         self._model.resolutionIndex = group.checkedId()
 
     def _launchFolderSelect(self):
         path = QFileDialog.getExistingDirectory(directory='/home/Karol', options=QFileDialog.Option.ShowDirsOnly)
-        print(path)
         if path:
             # Styling:
             limit = 40
@@ -101,7 +100,6 @@ class Controller:
 
     def _launchFilesSelect(self):
         files, _ = QFileDialog.getOpenFileNames(directory='/home/Karol/Pictures', filter='jpg(*.jpg *.JPG)')
-        print(files)
         filesCount = len(files)
         if filesCount:
             # Styling:
@@ -111,25 +109,38 @@ class Controller:
 
             # Operation:
             self._model.files = files
+            # self._view.progressDialog.setMaximum(filesCount)
             self._checkFilesSelected()
 
     def _updatePrefix(self, lineEdit: QLineEdit):
-        print('edited!')
         self._view.renameTipBox.clear()
         self._model.prefix = lineEdit.text()
-        self._model.firstIndex = None
-        print(self._model.prefix)
+        self._model.nextIndex = None
 
     def _executeOperations(self):
         self._model.runOperations()
+        thread = self._model.thread
+        worker = self._model.worker
+        thread.started.connect(partial(self._switchToProgressBar, len(self._model.files)))
+        thread.started.connect(worker.run)
+        worker.finished.connect(thread.quit)
+        worker.finished.connect(worker.deleteLater)
+        thread.finished.connect(thread.deleteLater)
+        worker.progress.connect(self._updateProgress)
+        thread.start()
+
+        thread.finished.connect(self._switchToConfirmation)
+
+    def _updateProgress(self, finished: int):
+        self._view.progressBar.setValue(finished)
 
     def _checkIndexes(self):
-        nextFreeIndex = int(self._model.checkExistingPrefixes())
-        self._model.firstIndex = nextFreeIndex
+        nextFreeIndex = self._model.checkExistingPrefixes()
+        self._model.nextIndex = nextFreeIndex
 
         self._view.renameTipBox.info.setText('Pierwszy wolny index:')
         self._view.renameTipBox.details.setText(
-            f'{self._model.prefix}{str(self._model.firstIndex + 1).zfill(5)}.jpg'
+            f'{self._model.prefix}{str(self._model.nextIndex + 1).zfill(5)}.jpg'
         )
 
     def _checkFilesSelected(self):
@@ -147,6 +158,23 @@ class Controller:
         self._view.operationsDiv.setEnabled(True)
         self._view.submitBtn.graphicsEffect().setEnabled(False)
         self._view.submitBtn.setEnabled(True)
+
+    def _switchToProgressBar(self, maxValue: int):
+        self._view.submitBtn.setEnabled(False)
+        self._view.submitBtn.hide()
+        self._view.progressBar.setMaximum(maxValue)
+        self._view.progressBar.show()
+
+    def _switchToConfirmation(self):
+        self._view.progressBar.hide()
+        self._view.confirmBtn.setEnabled(True)
+        self._view.confirmBtn.show()
+
+    def _switchToExecution(self):
+        self._view.confirmBtn.setEnabled(False)
+        self._view.confirmBtn.hide()
+        self._view.submitBtn.setEnabled(True)
+        self._view.submitBtn.show()
 
     @staticmethod
     def __signalTest():
