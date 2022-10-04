@@ -10,6 +10,7 @@ from .utils.shorten_path import getShortenedPath
 
 class Controller:
     def __init__(self, model: Model, view: GUI):
+        super().__init__()
         self._model = model
         self._view = view
         self._connectSignalsAndSlots()
@@ -117,13 +118,16 @@ class Controller:
         self._model.prefix = lineEdit.text()
         self._model.nextIndex = None
 
+    def abort(self, worker):
+        worker.stillrunning = False
+
     def _executeOperations(self):
         self._model.runOperations()
         thread = self._model.thread
         worker = self._model.worker
         thread.started.connect(partial(self._switchToProgressBar, len(self._model.files)))
         thread.started.connect(worker.run)
-        # self._view.abortBtn.clicked.connect(worker.canceled)
+        self._view.abortBtn.clicked.connect(partial(self.abort, worker))
         worker.finished.connect(thread.quit)
         worker.finished.connect(worker.deleteLater)
         thread.finished.connect(thread.deleteLater)
@@ -161,8 +165,8 @@ class Controller:
         self._view.submitBtn.setEnabled(True)
 
     def _switchToProgressBar(self, maxValue: int):
-        self._view.submitBtn.setEnabled(False)
         self._view.submitBtn.hide()
+        self._view.progressDiv.barFilled(bool_=False)
         self._view.progressBar.setMaximum(maxValue)
         self._view.progressDiv.show()
 

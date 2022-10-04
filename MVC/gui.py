@@ -4,9 +4,9 @@ import time
 
 from PyQt6.QtCore import (
     Qt,
-    QPoint,
+    QPoint
 )
-from PyQt6.QtGui import QIcon, QFont
+from PyQt6.QtGui import QColor, QIcon, QFont
 from PyQt6.QtWidgets import (
     QApplication,
     QButtonGroup,
@@ -32,17 +32,21 @@ from PyQt6.QtWidgets import (
     QGraphicsDropShadowEffect,
     QGraphicsOpacityEffect
 )
-from .custom_widgets.custom_line_edit import CustomLineEdit
-from .custom_widgets.div import Div
-from .custom_widgets.file_push_button import FilePushButton
-from .custom_widgets.operation_div import OperationDiv
-from .custom_widgets.progress_div import ProgressDiv
-from .custom_widgets.select_button import SelectButton
-from .custom_widgets.tip_box import TipBox
+from .customWidgets.lineEditDiv import LineEditDiv
+from .customWidgets.div import Div
+from .customWidgets.filesButton import FilesPushButton
+from .customWidgets.operation_div import OperationDiv
+from .customWidgets.progress_div import ProgressDiv
+from .customWidgets.selectButton import SelectButton
+from .customWidgets.tipBox import TipBox
 from .utils.graphic_effects_handler import addOpacityEffect
 
 
 class GUI(QMainWindow):
+    """
+    This class is responsible for creating main layout of the app.
+    Some widgets are imported from 'customWidgets' module.
+    """
     marginS = 8
     marginM = 12
     marginL = 16
@@ -51,6 +55,7 @@ class GUI(QMainWindow):
     def __init__(self):
         super(GUI, self).__init__(parent=None)
         self.setWindowTitle('Photomod')
+        self.setWindowIcon(QIcon('../resources/icons/window-icon.png'))
         self.mainLayout = QVBoxLayout()
         self.mainLayout.setSpacing(12)
         self.setContentsMargins(12, 12, 12, 4)
@@ -63,19 +68,26 @@ class GUI(QMainWindow):
         self._createExecutionDiv()
 
     def _createPickFolder(self):
+        """
+        Creates container with Folder and File choosing buttons.
+        """
         self.filesDiv = Div('Pliki:')
         # Section items:
         form = QFormLayout()
         form.setVerticalSpacing(self.marginS)
         form.setHorizontalSpacing(self.marginL)
-        self.targetDirButton = FilePushButton('Wybierz')
-        self.chooseFilesButton = FilePushButton('Wybierz')
+        self.targetDirButton = FilesPushButton('Wybierz')
+        self.chooseFilesButton = FilesPushButton('Wybierz')
         form.addRow('Folder docelowy:', self.targetDirButton)
         form.addRow('Pliki do edycji:', self.chooseFilesButton)
         self.filesDiv.layout.addLayout(form, stretch=False)
         self.mainLayout.addWidget(self.filesDiv)
 
     def _createOperations(self):
+        """
+        Creates container with Available operations.
+        Disabled by default!
+         """
         self.operationsDiv = Div('Operacje:')
         self.operationsDiv.setEnabled(False)
         addOpacityEffect(element=self.operationsDiv)
@@ -103,10 +115,13 @@ class GUI(QMainWindow):
             operationGroup.addButton(div.toggleButton, id=id_)
 
     def _createRenameDiv(self):
+        """
+        Creates and returns container storing Rename operation interface.
+        """
         renameDiv = OperationDiv('Zmień nazwę:')
 
         self.renameToggleButton = renameDiv.toggleButton
-        self.renameInput = CustomLineEdit(buttonText='Sprawdź')
+        self.renameInput = LineEditDiv(buttonText='Sprawdź')
         self.renameInput.setEnabled(False)
         self.checkIndexesButton = self.renameInput.button
         self.renameTipBox = TipBox()
@@ -121,6 +136,9 @@ class GUI(QMainWindow):
         return renameDiv
 
     def _createRotateDiv(self):
+        """
+        Creates and returns container storing Rotate operation interface.
+        """
         rotateDiv = OperationDiv('Obróć obraz:')
 
         self.rotateGroup = QButtonGroup(parent=rotateDiv)
@@ -140,6 +158,9 @@ class GUI(QMainWindow):
         return rotateDiv
 
     def _createResolutionDiv(self):
+        """
+        Creates and returns container storing Change Resolution operation interface.
+        """
         resolutionDiv = OperationDiv('Zmień rozdzielczość:')
 
         self.resolutionGroup = QButtonGroup(parent=resolutionDiv)
@@ -160,7 +181,11 @@ class GUI(QMainWindow):
         return resolutionDiv
 
     def _createExecutionDiv(self):
+        frame = QFrame()
         div = QHBoxLayout()
+        frame.setLayout(div)
+        frame.setFixedHeight(86)
+        frame.layout().setAlignment(Qt.AlignmentFlag.AlignVCenter)
         div.setAlignment(Qt.AlignmentFlag.AlignHCenter)
         div.setContentsMargins(0, 24, 0, 24)
 
@@ -168,14 +193,14 @@ class GUI(QMainWindow):
         self.submitBtn.setCursor(Qt.CursorShape.PointingHandCursor)
         self.submitBtn.setProperty('class', 'submitBtn')
         self.submitBtn.setFixedSize(206, 38)
-        div.addWidget(self.submitBtn)
+        frame.layout().addWidget(self.submitBtn)
 
-        self.progressDiv = ProgressDiv(parent=self, abortText='Przerwij', continueText='Kontynuuj')
+        self.progressDiv = ProgressDiv(parent=self, abortText='Przerwij', continueText='Kontynuuj', height=26)
         self.progressBar = self.progressDiv.bar
         self.continueBtn = self.progressDiv.continueBtn
         self.abortBtn = self.progressDiv.abortBtn
-        div.addWidget(self.progressDiv)
+        frame.layout().addWidget(self.progressDiv)
 
-        self.mainLayout.addLayout(div)
+        self.mainLayout.addWidget(frame)
         addOpacityEffect(element=self.submitBtn, level=0.15)
         self.submitBtn.setEnabled(False)

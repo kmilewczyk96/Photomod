@@ -1,5 +1,3 @@
-import re
-
 from PyQt6.QtCore import Qt, QRegularExpression
 from PyQt6.QtGui import QRegularExpressionValidator
 from PyQt6.QtWidgets import (
@@ -10,7 +8,10 @@ from PyQt6.QtWidgets import (
 )
 
 
-class CustomLineEdit(QFrame):
+class LineEditDiv(QFrame):
+    """
+    Container for customized QLineEdit with QPushButton.
+    """
     def __init__(self, buttonText: str):
         super().__init__()
         self.setProperty('class', 'renameDiv')

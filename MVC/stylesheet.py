@@ -47,7 +47,7 @@ def get_stylesheet():
             border-left: 1px solid #868e96;
             border-bottom-right-radius: 5;
             border-top-right-radius: 5;
-            padding: 5;
+            padding: 5 12;
         }
         .renameBtn:disabled {
             color: #495057;

@@ -1,17 +1,15 @@
 from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import (
-    QLineEdit,
     QFrame,
-    QHBoxLayout,
     QLabel,
-    QPushButton,
-    QToolButton,
     QVBoxLayout,
-    QWidget
 )
 
 
 class TipBox(QFrame):
+    """
+    Custom widget containing two lines of text. Purposed to serve information to the user.
+    """
     def __init__(self):
         super().__init__()
         self.setFixedSize(200, 38)
@@ -20,12 +18,10 @@ class TipBox(QFrame):
         layout.setContentsMargins(0, 0, 0, 0)
         layout.setSpacing(2)
 
-        self.info = QLabel()  # Demo
-        # info = QLabel()
+        self.info = QLabel()
         self.info.setFixedHeight(18)
 
-        self.details = QLabel()  # Demo
-        # details = QLabel()
+        self.details = QLabel()
         self.details.setFixedHeight(18)
 
         layout.addWidget(self.info)
@@ -33,5 +29,6 @@ class TipBox(QFrame):
         self.setLayout(layout)
 
     def clear(self):
+        """Clear tip box."""
         self.info.setText('')
         self.details.setText('')

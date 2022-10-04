@@ -1,35 +1,17 @@
 from PyQt6.QtCore import (
-    Qt,
-    QPoint
+    Qt
 )
-from PyQt6.QtGui import QIcon
+
 from PyQt6.QtWidgets import (
-    QApplication,
-    QButtonGroup,
-    QCheckBox,
-    QFileDialog,
-    QFormLayout,
-    QFrame,
-    QGridLayout,
-    QHBoxLayout,
-    QLabel,
-    QLineEdit,
-    QMainWindow,
-    QPushButton,
-    QRadioButton,
-    QSlider,
-    QSpinBox,
-    QToolButton,
-    QVBoxLayout,
-    QWidget,
-    QComboBox,
-    QSizePolicy,
-    QGraphicsDropShadowEffect,
-    QGraphicsOpacityEffect
+    QPushButton
 )
 
 
-class FilePushButton(QPushButton):
+class FilesPushButton(QPushButton):
+    """
+    Customized QPushButton simulating QRadio button 'Checked' state.
+    Its purpose is to be checked once and never change the state after.
+    """
     def __init__(self, label: str):
         super().__init__()
         self.setFixedHeight(26)
@@ -40,7 +22,7 @@ class FilePushButton(QPushButton):
         self.checked = False
 
     def pseudoCheck(self):
-        """Create effect of button being checked."""
+        """Create effect of button being checked/enabled."""
         if not self.checked:
             self.setStyleSheet(
                 """

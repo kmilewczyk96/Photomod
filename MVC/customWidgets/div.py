@@ -1,4 +1,3 @@
-from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QFont
 from PyQt6.QtWidgets import (
     QFrame,
@@ -8,6 +7,9 @@ from PyQt6.QtWidgets import (
 
 
 class Div(QFrame):
+    """
+    Container for section contents, taking section name as the only parameter.
+    """
     def __init__(self, sectionName: str):
         super().__init__()
         self.setProperty('class', 'section')

@@ -1,14 +1,14 @@
 from PyQt6.QtCore import Qt
-from PyQt6.QtGui import QColor
 from PyQt6.QtWidgets import (
-    QRadioButton,
-    QGraphicsDropShadowEffect,
-    QGraphicsBlurEffect,
-    QGraphicsOpacityEffect
+    QRadioButton
 )
 
 
 class SelectButton(QRadioButton):
+    """
+    Customized QRadioButton, purpose of this class is to unify operation buttons style.
+    IMPORTANT!: cssIdName should be lowercase section name so the automatic styling could be applied.
+    """
     def __init__(self, cssIdName: str):
         super().__init__()
         self.setFixedSize(92, 38)

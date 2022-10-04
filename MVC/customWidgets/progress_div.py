@@ -1,14 +1,9 @@
-from PyQt6.QtCore import pyqtSignal, Qt, QObject, QThread, QPoint
+from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import (
-    QApplication,
     QFrame,
     QHBoxLayout,
-    QLabel,
-    QMainWindow,
     QProgressBar,
-    QPushButton,
-    QVBoxLayout,
-    QWidget,
+    QPushButton
 )
 
 
@@ -24,7 +19,6 @@ class ProgressDiv(QFrame):
 
         self.bar = QProgressBar(parent=self)
         self.bar.setFixedHeight(height)
-        # self.bar.setFormat("")
         self.bar.setObjectName('progressBar')
         layout.addWidget(self.bar)
 
