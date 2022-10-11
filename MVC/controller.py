@@ -1,9 +1,11 @@
 import sys
 from functools import partial
 
+from PyQt6.QtCore import QThread
 from PyQt6.QtWidgets import QFileDialog, QLineEdit, QButtonGroup
 
 from .gui import GUI
+from .image_operations import ImageWorker
 from .model import Model
 from .utils.shorten_path import getShortenedPath
 
@@ -118,26 +120,29 @@ class Controller:
         self._model.prefix = lineEdit.text()
         self._model.nextIndex = None
 
-    def abort(self, worker):
-        worker.stillrunning = False
-
     def _executeOperations(self):
         self._model.runOperations()
-        thread = self._model.thread
-        worker = self._model.worker
-        thread.started.connect(partial(self._switchToProgressBar, len(self._model.files)))
-        thread.started.connect(worker.run)
-        self._view.abortBtn.clicked.connect(partial(self.abort, worker))
-        worker.finished.connect(thread.quit)
-        worker.finished.connect(worker.deleteLater)
-        thread.finished.connect(thread.deleteLater)
-        worker.progress.connect(self._updateProgress)
-        thread.start()
 
-        thread.finished.connect(self._switchToConfirmation)
+        # Create Worker object and move it to the new QThread:
+        self.thread = QThread()
+        self.worker = ImageWorker(model=self._model)
+        self.worker.moveToThread(self.thread)
+        abort = self._view.abortBtn.clicked.connect(self.thread.requestInterruption)
 
-    def _updateProgress(self, finished: int):
-        self._view.progressBar.setValue(finished)
+        self.thread.started.connect(partial(self._switchToProgressBar, len(self._model.files)))
+        self.thread.started.connect(self.worker.run)
+        self.thread.finished.connect(self.thread.deleteLater)
+        self.thread.finished.connect(partial(self._view.abortBtn.disconnect, abort))
+        self.thread.finished.connect(self._switchToConfirmation)
+
+        self.worker.finished.connect(self.thread.quit)
+        self.worker.finished.connect(self.worker.deleteLater)
+        self.worker.progress.connect(self._updateProgress)
+
+        self.thread.start()
+
+    def _updateProgress(self, index: int):
+        self._view.progressBar.setValue(index)
 
     def _checkIndexes(self):
         nextFreeIndex = self._model.checkExistingPrefixes()
@@ -168,6 +173,7 @@ class Controller:
         self._view.submitBtn.hide()
         self._view.progressDiv.barFilled(bool_=False)
         self._view.progressBar.setMaximum(maxValue)
+        self._view.progressBar.setValue(0)
         self._view.progressDiv.show()
 
     def _switchToConfirmation(self):

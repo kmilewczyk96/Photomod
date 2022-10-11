@@ -1,8 +1,7 @@
-from PyQt6.QtCore import (
-    Qt
-)
-
+from PyQt6.QtCore import Qt
+from PyQt6.QtGui import QColor
 from PyQt6.QtWidgets import (
+    QGraphicsDropShadowEffect,
     QPushButton
 )
 
@@ -19,11 +18,11 @@ class FilesPushButton(QPushButton):
         self.setCursor(Qt.CursorShape.PointingHandCursor)
         self.setProperty('class', 'fileBtn')
         self._setInitialStyle()
-        self.checked = False
+        self.altered = False
 
     def pseudoCheck(self):
         """Create effect of button being checked/enabled."""
-        if not self.checked:
+        if not self.altered:
             self.setStyleSheet(
                 """
                 .fileBtn {
@@ -39,6 +38,8 @@ class FilesPushButton(QPushButton):
                 }
                 """
             )
+
+            self.altered = True
 
     def _setInitialStyle(self):
         self.setStyleSheet(

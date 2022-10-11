@@ -31,16 +31,10 @@ class Model:
         try:
             lastIndex = samePrefixFiles[-1]
         except IndexError:
-            print('Brak plików z tym prefixem')
             return 0
         else:
-            print(f'Ostatni plik z tym prefixem: {lastIndex}')
             return int(lastIndex.split(self.prefix)[-1].split('.')[0])
 
     def runOperations(self):
         if not isinstance(self.nextIndex, int) and self.rename:
             self.nextIndex = self.checkExistingPrefixes()
-
-        self.thread = QThread()
-        self.worker = ImageWorker(model=self)
-        self.worker.moveToThread(self.thread)

@@ -25,19 +25,19 @@ class ImageWorker(QObject):
 
     def run(self):
         ImageFile.LOAD_TRUNCATED_IMAGES = True
-        for finished, img in enumerate(self.FILES):
+        for index, img in enumerate(self.FILES):
+            if self.thread().isInterruptionRequested():
+                break
             with Image.open(img) as original:
                 original.load()
 
             if self.RESOLUTION:
-                self.currentOperation.emit('Zmieniam rozdzielczość...')
                 max_ = self.RESOLUTIONS[self.RESOLUTION_INDEX]
                 originalSize = max(original.size)
                 if originalSize > max_:
                     original.thumbnail(size=(max_, max_), resample=Image.LANCZOS)
 
             if self.ROTATE:
-                self.currentOperation.emit('Obracam obraz...')
                 original = original.rotate(self.ROTATE_VALUES[self.ROTATE_INDEX], expand=True)
 
             if self.RENAME:
@@ -47,9 +47,8 @@ class ImageWorker(QObject):
             else:
                 newName = os.path.basename(img)
 
-            self.currentOperation.emit('Zapisuję...')
             original.save(os.path.join(self.TARGET_PATH, newName), quality=95, subsampling=0)
             original.close()
-            self.progress.emit(finished + 1)
+            self.progress.emit(index + 1)
 
         self.finished.emit()
