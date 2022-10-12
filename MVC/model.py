@@ -1,10 +1,6 @@
 import os
 import re
 
-from PyQt6.QtCore import QThread
-
-from .image_operations import ImageWorker
-
 
 class Model:
     def __init__(self):
@@ -38,3 +34,4 @@ class Model:
     def runOperations(self):
         if not isinstance(self.nextIndex, int) and self.rename:
             self.nextIndex = self.checkExistingPrefixes()
+

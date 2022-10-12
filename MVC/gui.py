@@ -12,6 +12,7 @@ from PyQt6.QtWidgets import (
     QButtonGroup,
     QCheckBox,
     QProgressDialog,
+    QDialog,
     QFileDialog,
     QFormLayout,
     QFrame,
@@ -34,6 +35,7 @@ from PyQt6.QtWidgets import (
 )
 from .customWidgets.lineEditDiv import LineEditDiv
 from .customWidgets.div import Div
+from .customWidgets.errorDialog import ErrorDialog
 from .customWidgets.filesButton import FilesPushButton
 from .customWidgets.operation_div import OperationDiv
 from .customWidgets.progress_div import ProgressDiv
@@ -82,6 +84,7 @@ class GUI(QMainWindow):
         form.addRow('Pliki do edycji:', self.chooseFilesButton)
         self.filesDiv.layout.addLayout(form, stretch=False)
         self.mainLayout.addWidget(self.filesDiv)
+        self._createErrorBox()
 
     def _createOperations(self):
         """
@@ -204,3 +207,6 @@ class GUI(QMainWindow):
         self.mainLayout.addWidget(frame)
         addOpacityEffect(element=self.submitBtn, level=0.15)
         self.submitBtn.setEnabled(False)
+
+    def _createErrorBox(self):
+        self.errorDialog = ErrorDialog(self)

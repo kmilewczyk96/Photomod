@@ -88,6 +88,7 @@ class Controller:
         self._model.resolutionIndex = group.checkedId()
 
     def _launchFolderSelect(self):
+        """Launches QFileDialog allowing User to pick target directory."""
         path = QFileDialog.getExistingDirectory(directory='/home/Karol', options=QFileDialog.Option.ShowDirsOnly)
         if path:
             # Styling:
@@ -102,6 +103,7 @@ class Controller:
             self._checkFilesSelected()
 
     def _launchFilesSelect(self):
+        """Launches QFileDialog allowing User to pick images he wants to work with."""
         files, _ = QFileDialog.getOpenFileNames(directory='/home/Karol/Pictures', filter='jpg(*.jpg *.JPG)')
         filesCount = len(files)
         if filesCount:
@@ -120,7 +122,10 @@ class Controller:
         self._model.prefix = lineEdit.text()
         self._model.nextIndex = None
 
-    def _executeOperations(self):
+    def _executeOperations(self) -> None:
+        """
+        Creates QThread and ImageWorker instances responsible for running all image operations.
+        """
         self._model.runOperations()
 
         # Create Worker object and move it to the new QThread:
@@ -138,6 +143,7 @@ class Controller:
         self.worker.finished.connect(self.thread.quit)
         self.worker.finished.connect(self.worker.deleteLater)
         self.worker.progress.connect(self._updateProgress)
+        self.worker.filenamesError.connect(self._view.errorDialog.show)
 
         self.thread.start()
 
