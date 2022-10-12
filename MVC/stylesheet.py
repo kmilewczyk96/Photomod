@@ -4,6 +4,44 @@ def get_stylesheet():
             background-color: #212529;
             color: #e9ecef;  
         }
+        .warningDialog {
+            background-color: #212529;
+            color: #e9ecef;
+        }
+        .warningDialogScrollArea {
+            background-color: #fff9db;
+            border: none;
+        }
+        
+        .warningDialogScrollArea QLabel {
+            color: #f59f00;
+        }
+        
+        .warningScrollBar {
+            background: #f8f9fa;
+            width: 12;
+        }
+        .warningScrollBar::handle:vertical {
+            min-height: 20;
+            background: #fab005;
+            border-radius: 5;
+        }
+        .warningScrollBar::handle:vertical:pressed {
+            background: #f59f00;
+        }
+        .warningScrollBar::add-line {
+            height: 0;
+        }
+        .warningScrollBar::sub-line {
+            height: 0;
+        }
+        
+        .warningList {
+            border: 1px solid #fcc419;
+            border-radius: 5px;
+            background-color: #fff3bf;
+        }
+        
         QLabel {
             color: #e9ecef;
         }

@@ -35,7 +35,8 @@ from PyQt6.QtWidgets import (
 )
 from .customWidgets.lineEditDiv import LineEditDiv
 from .customWidgets.div import Div
-from .customWidgets.errorDialog import ErrorDialog
+from .customWidgets.warningDialog import WarningDialog
+from .customWidgets.warningList import WarningList
 from .customWidgets.filesButton import FilesPushButton
 from .customWidgets.operation_div import OperationDiv
 from .customWidgets.progress_div import ProgressDiv
@@ -209,4 +210,4 @@ class GUI(QMainWindow):
         self.submitBtn.setEnabled(False)
 
     def _createErrorBox(self):
-        self.errorDialog = ErrorDialog(self)
+        self.errorDialog = WarningDialog(parent=self, warningList=None)

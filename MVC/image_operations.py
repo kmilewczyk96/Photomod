@@ -32,8 +32,8 @@ class ImageWorker(QObject):
         if not self.RENAME:
             collisions = self._checkForCollisions()
             if collisions:
-                print(f'Collided images: {collisions}')
                 self.filenamesError.emit(collisions)
+                self.finished.emit()
                 return None
 
         if not self.pillowRequired:

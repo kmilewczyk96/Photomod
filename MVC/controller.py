@@ -2,12 +2,18 @@ import sys
 from functools import partial
 
 from PyQt6.QtCore import QThread
-from PyQt6.QtWidgets import QFileDialog, QLineEdit, QButtonGroup
+from PyQt6.QtWidgets import (
+    QFileDialog,
+    QLineEdit,
+    QButtonGroup
+)
 
 from .gui import GUI
 from .image_operations import ImageWorker
 from .model import Model
 from .utils.shorten_path import getShortenedPath
+from .customWidgets.warningDialog import WarningDialog
+from .customWidgets.warningList import WarningList
 
 
 class Controller:
@@ -143,9 +149,14 @@ class Controller:
         self.worker.finished.connect(self.thread.quit)
         self.worker.finished.connect(self.worker.deleteLater)
         self.worker.progress.connect(self._updateProgress)
-        self.worker.filenamesError.connect(self._view.errorDialog.show)
+        self.worker.filenamesError.connect(self._createWarningDialog)
 
         self.thread.start()
+
+    def _createWarningDialog(self, warningListItems: list):
+        warningList = WarningList(warningListItems=warningListItems)
+        self.warningDialog = WarningDialog(parent=self._view, warningList=warningList)
+        self.warningDialog.show()
 
     def _updateProgress(self, index: int):
         self._view.progressBar.setValue(index)
