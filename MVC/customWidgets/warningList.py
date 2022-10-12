@@ -12,13 +12,14 @@ from PyQt6.QtWidgets import (
 class WarningList(QWidget):
     def __init__(self, warningListItems: list):
         super().__init__()
+        self.setContentsMargins(0, 0, 0, 0)
         self.warningListItems = warningListItems
         mainLayout = QVBoxLayout()
         self._prepareScrollArea()
         mainLayout.addWidget(self.scrollArea)
-        self.setMinimumWidth(300)
-        self.setMaximumHeight(150)
+        self.setMaximumHeight(250)
         self.setLayout(mainLayout)
+        self.layout().setContentsMargins(0, 0, 0, 0)
         self._populate()
 
     def _populate(self):
@@ -27,13 +28,14 @@ class WarningList(QWidget):
             item = QLabel(item)
             item.setAlignment(Qt.AlignmentFlag.AlignCenter)
             self.scrollLayout.addWidget(item)
-        self.scrollLayout.addStretch()
 
     def _prepareScrollArea(self):
         self.scrollArea = QScrollArea()
+        self.scrollArea.setProperty('class', 'warningList')
+        self.scrollArea.setFrameStyle(QFrame.Shape.NoFrame)
         self.scrollBar = QScrollBar()
         self.scrollBar.setProperty('class', 'warningScrollBar')
-        self.scrollBar.setMinimumHeight(15)
+        self.scrollBar.setCursor(Qt.CursorShape.PointingHandCursor)
         self.scrollArea.setVerticalScrollBar(self.scrollBar)
         self.scrollArea.setWidgetResizable(True)
         self.scrollAreaMainWidget = QWidget()

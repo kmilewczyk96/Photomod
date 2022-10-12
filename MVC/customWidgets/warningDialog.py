@@ -1,20 +1,18 @@
 from PyQt6.QtCore import Qt
-from PyQt6.QtGui import QColor, QIcon
+from PyQt6.QtGui import QIcon
 from PyQt6.QtWidgets import (
     QDialog,
-    QGraphicsDropShadowEffect,
     QVBoxLayout,
-    QLabel
+    QLabel,
+    QPushButton
 )
-
-
-from .warningList import WarningList
 
 
 class WarningDialog(QDialog):
     def __init__(self, parent, warningList):
         super().__init__(parent=parent)
         self.warningList = warningList
+        self.setMinimumWidth(350)
         self._setWindowPersonalization()
         self.setWindowIcon(QIcon('../../resources/icons/warning-icon.png'))
         self.setWindowTitle('Operacja nie może zostać wykonana!')
@@ -30,7 +28,12 @@ class WarningDialog(QDialog):
         self.exec()
 
     def _createContent(self):
-        labelTip = QLabel('Zmień nazwę poniższych plików lub wybierz inny folder docelowy:')
+        labelTip = QLabel('Kolizja nazw w folderze docelowym!')
+        labelTip.setProperty('class', 'warningMessage')
         self.layout().addWidget(labelTip)
         if self.warningList:
             self.layout().addWidget(self.warningList)
+        self.errorBtn = QPushButton('ZAMKNIJ')
+        self.errorBtn.setProperty('class', 'warningBtn')
+        self.errorBtn.setCursor(Qt.CursorShape.PointingHandCursor)
+        self.layout().addWidget(self.errorBtn)

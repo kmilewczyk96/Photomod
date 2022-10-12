@@ -5,41 +5,61 @@ def get_stylesheet():
             color: #e9ecef;  
         }
         .warningDialog {
-            background-color: #212529;
-            color: #e9ecef;
+            background-color: #495057;
         }
+        .warningDialog QLabel {
+            color: #c92a2a;
+        }
+        .warningMessage {
+            border: 1px solid #c92a2a;
+            border-radius: 5;
+            background: #ffe3e3;
+            padding: 6 12;
+        }
+        .warningList {
+            border: 1px solid #c92a2a;
+            border-radius: 5;
+            background: #ffe3e3;
+        }
+        .warningBtn {
+            color: #fff5f5;
+            border: 1px solid #c92a2a;
+            border-radius: 5;
+            background: #ff6b6b;
+            padding: 6 12;
+        }
+        .warningBtn:hover {
+            background: #f03e3e;
+            color: #fff5f5;
+        }
+        
         .warningDialogScrollArea {
-            background-color: #fff9db;
+            background-color: transparent;
             border: none;
+            border-top-left-radius: 5;
+            border-bottom-left-radius: 5;
         }
-        
-        .warningDialogScrollArea QLabel {
-            color: #f59f00;
-        }
-        
         .warningScrollBar {
-            background: #f8f9fa;
+            background: #fff5f5;
             width: 12;
+            border-top-right-radius: 5;
+            border-bottom-right-radius: 5;
         }
         .warningScrollBar::handle:vertical {
             min-height: 20;
-            background: #fab005;
+            background: #ff8787;
+            border: 1.4px solid #c92a2a;
             border-radius: 5;
         }
+
         .warningScrollBar::handle:vertical:pressed {
-            background: #f59f00;
+            background: #f03e3e;
         }
         .warningScrollBar::add-line {
             height: 0;
         }
         .warningScrollBar::sub-line {
             height: 0;
-        }
-        
-        .warningList {
-            border: 1px solid #fcc419;
-            border-radius: 5px;
-            background-color: #fff3bf;
         }
         
         QLabel {

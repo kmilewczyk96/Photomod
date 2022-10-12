@@ -156,6 +156,8 @@ class Controller:
     def _createWarningDialog(self, warningListItems: list):
         warningList = WarningList(warningListItems=warningListItems)
         self.warningDialog = WarningDialog(parent=self._view, warningList=warningList)
+        self.warningDialog.errorBtn.clicked.connect(self.warningDialog.hide)
+        self.warningDialog.errorBtn.clicked.connect(self._switchToExecution)
         self.warningDialog.show()
 
     def _updateProgress(self, index: int):

@@ -85,7 +85,6 @@ class GUI(QMainWindow):
         form.addRow('Pliki do edycji:', self.chooseFilesButton)
         self.filesDiv.layout.addLayout(form, stretch=False)
         self.mainLayout.addWidget(self.filesDiv)
-        self._createErrorBox()
 
     def _createOperations(self):
         """
@@ -209,5 +208,3 @@ class GUI(QMainWindow):
         addOpacityEffect(element=self.submitBtn, level=0.15)
         self.submitBtn.setEnabled(False)
 
-    def _createErrorBox(self):
-        self.errorDialog = WarningDialog(parent=self, warningList=None)
