@@ -6,7 +6,8 @@ from PyQt6.QtCore import pyqtSignal, QObject
 
 
 class ImageWorker(QObject):
-    finished = pyqtSignal()
+    """Does all operations, sends signals to main thread with information about progress and potential errors."""
+    finished = pyqtSignal(bool)
     progress = pyqtSignal(int)
     currentOperation = pyqtSignal(str)
     filenamesError = pyqtSignal(list)
@@ -26,55 +27,67 @@ class ImageWorker(QObject):
         self.RESOLUTION_INDEX = model.resolutionIndex
 
         self.pillowRequired = True if self.ROTATE or self.RESOLUTION else False
-        self.errorsRaisedFlag = False
 
-    def run(self):
+    def run(self) -> None:
+        # Check if there are no collisions with existing files in target dir:
         if not self.RENAME:
             collisions = self._checkForCollisions()
             if collisions:
                 self.filenamesError.emit(collisions)
-                self.finished.emit()
-                return None
+                self.finished.emit(False)
+                return
 
+        # Prevent image from loading if no Pillow operations required:
         if not self.pillowRequired:
-            self._shutilOperations()
+            self.finished.emit(self._shutilOperations())
+            return
 
+        # Execute Pillow operations:
         else:
-            ImageFile.LOAD_TRUNCATED_IMAGES = True
-            for index, img in enumerate(self.FILES):
-                if self.thread().isInterruptionRequested():
-                    break
-                with Image.open(img) as original:
-                    original.load()
+            self.finished.emit(self._pillowOperations())
+            return
 
-                if self.RESOLUTION:
-                    max_ = self.RESOLUTIONS[self.RESOLUTION_INDEX]
-                    originalSize = max(original.size)
-                    if originalSize > max_:
-                        original.thumbnail(size=(max_, max_), resample=Image.LANCZOS)
-
-                if self.ROTATE:
-                    original = original.rotate(self.ROTATE_VALUES[self.ROTATE_INDEX], expand=True)
-
-                if self.RENAME:
-                    newName = self._nextName()
-
-                else:
-                    newName = os.path.basename(img)
-
-                original.save(os.path.join(self.TARGET_PATH, newName), quality=95, subsampling=0)
-                original.close()
-                self.progress.emit(index + 1)
-
-        self.finished.emit()
-
-    def _shutilOperations(self):
+    def _shutilOperations(self) -> bool:
         """Executes built-in copy and rename if necessary."""
         for index, img in enumerate(self.FILES):
+            if self.thread().isInterruptionRequested():
+                return False
             newName = self._nextName() if self.RENAME else os.path.basename(img)
             output = os.path.join(self.TARGET_PATH, newName)
             shutil.copy(src=img, dst=output)
             self.progress.emit(index + 1)
+
+        return True
+
+    def _pillowOperations(self) -> bool:
+        """Executes Pillow operations and saves modified copy to designated folder."""
+        ImageFile.LOAD_TRUNCATED_IMAGES = True
+        for index, img in enumerate(self.FILES):
+            if self.thread().isInterruptionRequested():
+                return False
+            with Image.open(img) as original:
+                original.load()
+
+            if self.RESOLUTION:
+                max_ = self.RESOLUTIONS[self.RESOLUTION_INDEX]
+                originalSize = max(original.size)
+                if originalSize > max_:
+                    original.thumbnail(size=(max_, max_), resample=Image.LANCZOS)
+
+            if self.ROTATE:
+                original = original.rotate(self.ROTATE_VALUES[self.ROTATE_INDEX], expand=True)
+
+            if self.RENAME:
+                newName = self._nextName()
+
+            else:
+                newName = os.path.basename(img)
+
+            original.save(os.path.join(self.TARGET_PATH, newName), quality=95, subsampling=0)
+            original.close()
+            self.progress.emit(index + 1)
+
+        return True
 
     def _checkForCollisions(self) -> list:
         """

@@ -7,7 +7,7 @@ from PyQt6.QtWidgets import (
 )
 
 
-class ProgressDiv(QFrame):
+class ExecuteDiv(QFrame):
     def __init__(self, parent, abortText: str, continueText: str, width=436, height=38):
         super().__init__(parent=parent)
         self.setObjectName('progressDiv')

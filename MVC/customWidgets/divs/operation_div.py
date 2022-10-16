@@ -6,7 +6,7 @@ from PyQt6.QtWidgets import (
     QWidget
 )
 
-from .toggleSlider import ToggleSlider
+from MVC.customWidgets.buttons.toggleSlider import ToggleSlider
 
 
 class OperationDiv(QFrame):

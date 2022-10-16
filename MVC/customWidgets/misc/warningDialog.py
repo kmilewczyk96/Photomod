@@ -14,7 +14,7 @@ class WarningDialog(QDialog):
         self.warningList = warningList
         self.setMinimumWidth(350)
         self._setWindowPersonalization()
-        self.setWindowIcon(QIcon('../../resources/icons/warning-icon.png'))
+        self.setWindowIcon(QIcon('../../../resources/icons/warning-icon.png'))
         self.setWindowTitle('Operacja nie może zostać wykonana!')
         mainLayout = QVBoxLayout()
         self.setLayout(mainLayout)
@@ -28,7 +28,7 @@ class WarningDialog(QDialog):
         self.exec()
 
     def _createContent(self):
-        labelTip = QLabel('Kolizja nazw w folderze docelowym!')
+        labelTip = QLabel('Zapobiegnięto kolizji nazw w folderze docelowym!')
         labelTip.setProperty('class', 'warningMessage')
         self.layout().addWidget(labelTip)
         if self.warningList:

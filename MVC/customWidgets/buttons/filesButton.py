@@ -1,7 +1,5 @@
 from PyQt6.QtCore import Qt
-from PyQt6.QtGui import QColor
 from PyQt6.QtWidgets import (
-    QGraphicsDropShadowEffect,
     QPushButton
 )
 
@@ -29,7 +27,7 @@ class FilesPushButton(QPushButton):
                     color: #087f5b;
                     background-color: #63e6be;
                     border: 2px solid #087f5b;
-                    border-radius: 5;
+                    border-radius: 3;
                     padding: 0 12;
                 }
                 .fileBtn:hover {
@@ -48,7 +46,7 @@ class FilesPushButton(QPushButton):
                 color: #495057;
                 background-color: #dee2e6;
                 border: 1px solid #343a40;
-                border-radius: 5;
+                border-radius: 3;
             }
             .fileBtn:hover {
                 color: #212529;

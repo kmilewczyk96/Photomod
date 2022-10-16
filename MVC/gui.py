@@ -1,47 +1,24 @@
-import os
-import sys
-import time
-
 from PyQt6.QtCore import (
-    Qt,
-    QPoint
+    Qt
 )
-from PyQt6.QtGui import QColor, QIcon, QFont
+from PyQt6.QtGui import QIcon
 from PyQt6.QtWidgets import (
-    QApplication,
     QButtonGroup,
-    QCheckBox,
-    QProgressDialog,
-    QDialog,
-    QFileDialog,
     QFormLayout,
     QFrame,
-    QGridLayout,
     QHBoxLayout,
-    QLabel,
-    QLineEdit,
     QMainWindow,
     QPushButton,
-    QProgressBar,
-    QSlider,
-    QSpinBox,
-    QToolButton,
     QVBoxLayout,
-    QWidget,
-    QComboBox,
-    QSizePolicy,
-    QGraphicsDropShadowEffect,
-    QGraphicsOpacityEffect
+    QWidget
 )
-from .customWidgets.lineEditDiv import LineEditDiv
-from .customWidgets.div import Div
-from .customWidgets.warningDialog import WarningDialog
-from .customWidgets.warningList import WarningList
-from .customWidgets.filesButton import FilesPushButton
-from .customWidgets.operation_div import OperationDiv
-from .customWidgets.progress_div import ProgressDiv
-from .customWidgets.selectButton import SelectButton
-from .customWidgets.tipBox import TipBox
+from MVC.customWidgets.divs.lineEditDiv import LineEditDiv
+from MVC.customWidgets.divs.sectionDiv import SectionDiv
+from MVC.customWidgets.buttons.filesButton import FilesPushButton
+from MVC.customWidgets.divs.operation_div import OperationDiv
+from MVC.customWidgets.divs.executeDiv import ExecuteDiv
+from MVC.customWidgets.buttons.selectButton import SelectButton
+from MVC.customWidgets.misc.tipBox import TipBox
 from .utils.graphic_effects_handler import addOpacityEffect
 
 
@@ -66,15 +43,13 @@ class GUI(QMainWindow):
         central = QWidget(self)
         central.setLayout(self.mainLayout)
         self.setCentralWidget(central)
-        self._createPickFolder()
+        self._createFilesSection()
         self._createOperations()
         self._createExecutionDiv()
 
-    def _createPickFolder(self):
-        """
-        Creates container with Folder and File choosing buttons.
-        """
-        self.filesDiv = Div('Pliki:')
+    def _createFilesSection(self):
+        """Creates container with Folder and File choosing buttons."""
+        self.filesDiv = SectionDiv(sectionName='Pliki:')
         # Section items:
         form = QFormLayout()
         form.setVerticalSpacing(self.marginS)
@@ -83,17 +58,14 @@ class GUI(QMainWindow):
         self.chooseFilesButton = FilesPushButton('Wybierz')
         form.addRow('Folder docelowy:', self.targetDirButton)
         form.addRow('Pliki do edycji:', self.chooseFilesButton)
-        self.filesDiv.layout.addLayout(form, stretch=False)
+        self.filesDiv.layout.addLayout(form)
+
         self.mainLayout.addWidget(self.filesDiv)
 
     def _createOperations(self):
-        """
-        Creates container with Available operations.
-        Disabled by default!
-         """
-        self.operationsDiv = Div('Operacje:')
+        """Creates container with Available operations. Disabled by default!"""
+        self.operationsDiv = SectionDiv('Operacje:')
         self.operationsDiv.setEnabled(False)
-        addOpacityEffect(element=self.operationsDiv)
 
         operationGroup = QButtonGroup(parent=self.operationsDiv)
         operationGroup.setExclusive(False)
@@ -198,7 +170,7 @@ class GUI(QMainWindow):
         self.submitBtn.setFixedSize(206, 38)
         frame.layout().addWidget(self.submitBtn)
 
-        self.progressDiv = ProgressDiv(parent=self, abortText='Przerwij', continueText='Kontynuuj', height=26)
+        self.progressDiv = ExecuteDiv(parent=self, abortText='Przerwij', continueText='Kontynuuj', height=26)
         self.progressBar = self.progressDiv.bar
         self.continueBtn = self.progressDiv.continueBtn
         self.abortBtn = self.progressDiv.abortBtn
