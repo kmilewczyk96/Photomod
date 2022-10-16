@@ -12,11 +12,11 @@ from PyQt6.QtWidgets import (
     QVBoxLayout,
     QWidget
 )
+from MVC.customWidgets.divs.executeDiv import ExecuteDiv
 from MVC.customWidgets.divs.lineEditDiv import LineEditDiv
 from MVC.customWidgets.divs.sectionDiv import SectionDiv
 from MVC.customWidgets.buttons.filesButton import FilesPushButton
-from MVC.customWidgets.divs.operation_div import OperationDiv
-from MVC.customWidgets.divs.executeDiv import ExecuteDiv
+from MVC.customWidgets.divs.operationDiv import OperationDiv
 from MVC.customWidgets.buttons.selectButton import SelectButton
 from MVC.customWidgets.misc.tipBox import TipBox
 from .utils.graphic_effects_handler import addOpacityEffect
@@ -45,7 +45,7 @@ class GUI(QMainWindow):
         self.setCentralWidget(central)
         self._createFilesSection()
         self._createOperations()
-        self._createExecutionDiv()
+        self._createExecuteDiv()
 
     def _createFilesSection(self):
         """Creates container with Folder and File choosing buttons."""
@@ -155,28 +155,7 @@ class GUI(QMainWindow):
 
         return resolutionDiv
 
-    def _createExecutionDiv(self):
-        frame = QFrame()
-        div = QHBoxLayout()
-        frame.setLayout(div)
-        frame.setFixedHeight(86)
-        frame.layout().setAlignment(Qt.AlignmentFlag.AlignVCenter)
-        div.setAlignment(Qt.AlignmentFlag.AlignHCenter)
-        div.setContentsMargins(0, 24, 0, 24)
-
-        self.submitBtn = QPushButton('Wykonaj')
-        self.submitBtn.setCursor(Qt.CursorShape.PointingHandCursor)
-        self.submitBtn.setProperty('class', 'submitBtn')
-        self.submitBtn.setFixedSize(206, 38)
-        frame.layout().addWidget(self.submitBtn)
-
-        self.progressDiv = ExecuteDiv(parent=self, abortText='Przerwij', continueText='Kontynuuj', height=26)
-        self.progressBar = self.progressDiv.bar
-        self.continueBtn = self.progressDiv.continueBtn
-        self.abortBtn = self.progressDiv.abortBtn
-        frame.layout().addWidget(self.progressDiv)
-
-        self.mainLayout.addWidget(frame)
-        addOpacityEffect(element=self.submitBtn, level=0.15)
-        self.submitBtn.setEnabled(False)
-
+    def _createExecuteDiv(self):
+        self.executeDiv = ExecuteDiv(parent=self)
+        self.mainLayout.addWidget(self.executeDiv)
+        self.executeDiv.setEnabled(False)

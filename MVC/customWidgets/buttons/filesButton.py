@@ -1,16 +1,14 @@
 from PyQt6.QtCore import Qt
-from PyQt6.QtWidgets import (
-    QPushButton
-)
+from PyQt6.QtWidgets import QPushButton
 
 
 class FilesPushButton(QPushButton):
     """
     Customized QPushButton simulating QRadio button 'Checked' state.
-    Its purpose is to be checked once and never change the state after.
+    Its purpose is to be checked once and never change the state afterwards.
     """
-    def __init__(self, label: str):
-        super().__init__()
+    def __init__(self, label: str, parent=None):
+        super().__init__(parent=parent)
         self.setFixedHeight(26)
         self.setText(label)
         self.setCursor(Qt.CursorShape.PointingHandCursor)
@@ -26,7 +24,7 @@ class FilesPushButton(QPushButton):
                 .fileBtn {
                     color: #087f5b;
                     background-color: #63e6be;
-                    border: 2px solid #087f5b;
+                    border: 1px solid #087f5b;
                     border-radius: 3;
                     padding: 0 12;
                 }

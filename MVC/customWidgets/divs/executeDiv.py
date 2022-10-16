@@ -1,54 +1,58 @@
 from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import (
     QFrame,
+    QGraphicsOpacityEffect,
     QHBoxLayout,
-    QProgressBar,
     QPushButton
 )
 
+from .progressBarDiv import ProgressBarDiv
+
 
 class ExecuteDiv(QFrame):
-    def __init__(self, parent, abortText: str, continueText: str, width=436, height=38):
+    """Special div that stores submitBtn and progressBarDiv created separately for each process."""
+    def __init__(self, parent=None):
         super().__init__(parent=parent)
-        self.setObjectName('progressDiv')
-        self.setFixedSize(width, height)
-        buttonsWidth = width // 5
-        layout = QHBoxLayout()
-        layout.setContentsMargins(0, 0, 0, 0)
-        layout.setSpacing(0)
+        self.layout = QHBoxLayout()
+        self.layout.setContentsMargins(0, 24, 0, 24)
+        self.layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.setLayout(self.layout)
+        self.setFixedHeight(86)
+        self._createBtn()
+        self.layout.addWidget(self.submitBtn)
+        self._createOpacity()
 
-        self.bar = QProgressBar(parent=self)
-        self.bar.setFixedHeight(height)
-        self.bar.setObjectName('progressBar')
-        layout.addWidget(self.bar)
+    def setEnabled(self, a0: bool) -> None:
+        super().setEnabled(a0)
+        self.graphicsEffect().setEnabled(True if not a0 else False)
 
-        self.abortBtn = QPushButton(abortText, parent=self)
-        self.abortBtn.setFixedSize(buttonsWidth, height)
-        self.abortBtn.setCursor(Qt.CursorShape.PointingHandCursor)
-        self.abortBtn.setProperty('class', 'progressBtn')
-        self.abortBtn.setObjectName('abortBtn')
-        layout.addWidget(self.abortBtn)
+    def switchToExecution(self):
+        """Disables and hides submitBtn and creates new progress bar div."""
+        self.submitBtn.setEnabled(False)
+        self.submitBtn.hide()
+        self._createProgressBar()
+        self.layout.addWidget(self.progressBarDiv)
 
-        self.continueBtn = QPushButton(continueText, parent=self)
-        self.continueBtn.setFixedSize(buttonsWidth, height)
-        self.continueBtn.setCursor(Qt.CursorShape.PointingHandCursor)
-        self.continueBtn.setProperty('class', 'progressBtn')
-        self.continueBtn.setObjectName('continueBtn')
-        self.continueBtn.setEnabled(False)
-        self.continueBtn.hide()
-        layout.addWidget(self.continueBtn)
+    def switchToStandBy(self):
+        """Removes progress bar div from layout and destroys it. Enables submitBtn back."""
+        self.layout.removeWidget(self.progressBarDiv)
+        del self.progressBarDiv
+        self.submitBtn.show()
+        self.submitBtn.setEnabled(True)
 
-        self.setLayout(layout)
-        self.hide()
+    def _createBtn(self):
+        self.submitBtn = QPushButton('Wykonaj')
+        self.submitBtn.setCursor(Qt.CursorShape.PointingHandCursor)
+        self.submitBtn.setProperty('class', 'submitBtn')
+        self.submitBtn.setFixedSize(206, 38)
 
-    def barFilled(self, bool_: bool):
-        if bool_:
-            self.abortBtn.setEnabled(False)
-            self.abortBtn.hide()
-            self.continueBtn.setEnabled(True)
-            self.continueBtn.show()
-        else:
-            self.continueBtn.setEnabled(False)
-            self.continueBtn.hide()
-            self.abortBtn.setEnabled(True)
-            self.abortBtn.show()
+    def _createOpacity(self):
+        """Sets default graphic effect for execution div, disabled by default."""
+        opacity = QGraphicsOpacityEffect()
+        opacity.setOpacity(0.2)
+        self.setGraphicsEffect(opacity)
+        self.setGraphicsEffect(opacity)
+
+    def _createProgressBar(self):
+        self.progressBarDiv = ProgressBarDiv(parent=self)
+

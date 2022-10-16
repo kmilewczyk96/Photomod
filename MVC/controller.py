@@ -35,8 +35,7 @@ class Controller:
 
         # Set enabled and remove opacity effect:
         self._view.operationsDiv.setEnabled(True)
-        self._view.submitBtn.graphicsEffect().setEnabled(False)
-        self._view.submitBtn.setEnabled(True)
+        self._view.executeDiv.setEnabled(True)
 
     def _checkIndexes(self):
         nextFreeIndex = self._model.checkExistingPrefixes()
@@ -75,32 +74,32 @@ class Controller:
         self._view.renameInput.lineEdit.textEdited.connect(partial(self._updatePrefix, self._view.renameInput.lineEdit))
 
         # Execute button:
-        self._view.submitBtn.clicked.connect(self._executeOperations)
-        self._view.continueBtn.clicked.connect(self._switchToExecution)
+        self._view.executeDiv.submitBtn.clicked.connect(self._executeOperations)
 
     def _createWarningDialog(self, warningListItems: list):
+        self._setVisible(False)
         warningList = WarningList(warningListItems=warningListItems)
         self.warningDialog = WarningDialog(parent=self._view, warningList=warningList)
         self.warningDialog.errorBtn.clicked.connect(self.warningDialog.hide)
+        self.warningDialog.errorBtn.clicked.connect(partial(self._setVisible, True))
         self.warningDialog.errorBtn.clicked.connect(self._switchToExecution)
         self.warningDialog.show()
 
     def _executeOperations(self) -> None:
-        """
-        Creates QThread and ImageWorker instances responsible for running all image operations.
-        """
+        """Creates QThread and ImageWorker instances responsible for running all image operations."""
         self._model.runOperations()
 
         # Create Worker object and move it to the new QThread:
         self.thread = QThread()
         self.worker = ImageWorker(model=self._model)
         self.worker.moveToThread(self.thread)
-        abort = self._view.abortBtn.clicked.connect(self.thread.requestInterruption)
 
-        self.thread.started.connect(partial(self._switchToProgressBar, len(self._model.files)))
+        self._switchToProgressBar(len(self._model.files))
         self.thread.started.connect(self.worker.run)
         self.thread.finished.connect(self.thread.deleteLater)
-        self.thread.finished.connect(partial(self._view.abortBtn.disconnect, abort))
+        self._view.executeDiv.progressBarDiv.continueBtn.clicked.connect(self._switchToExecution)
+        abort = self._view.executeDiv.progressBarDiv.abortBtn.clicked.connect(self.thread.requestInterruption)
+        self.thread.finished.connect(partial(self._view.executeDiv.progressBarDiv.abortBtn.disconnect, abort))
 
         self.worker.finished.connect(self.thread.quit)
         self.worker.finished.connect(self.worker.deleteLater)
@@ -151,21 +150,15 @@ class Controller:
             print('Successful')
         else:
             print('aborted!')
-        self._view.progressDiv.barFilled(bool_=True)
+        self._view.executeDiv.progressBarDiv.barFilled(bool_=True)
 
     def _switchToExecution(self):
-        self._view.progressBar.reset()
-        self._view.progressDiv.barFilled(bool_=False)
-        self._view.progressDiv.hide()
-        self._view.submitBtn.setEnabled(True)
-        self._view.submitBtn.show()
+        self._view.executeDiv.switchToStandBy()
 
     def _switchToProgressBar(self, maxValue: int):
-        self._view.submitBtn.hide()
-        self._view.progressDiv.barFilled(bool_=False)
-        self._view.progressBar.setMaximum(maxValue)
-        self._view.progressBar.setValue(0)
-        self._view.progressDiv.show()
+        self._view.executeDiv.switchToExecution()
+        self._view.executeDiv.progressBarDiv.bar.setMaximum(maxValue)
+        self._view.executeDiv.progressBarDiv.bar.setValue(0)
 
     @staticmethod
     def _toggleEffects(widgets: list, toggle: bool):
@@ -206,4 +199,8 @@ class Controller:
         self._model.nextIndex = None
 
     def _updateProgress(self, index: int):
-        self._view.progressBar.setValue(index)
+        self._view.executeDiv.progressBarDiv.bar.setValue(index)
+
+    def _setVisible(self, bool_: bool):
+        for widget in (self._view.filesDiv, self._view.operationsDiv, self._view.executeDiv):
+            widget.setEnabled(bool_)
