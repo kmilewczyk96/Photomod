@@ -9,9 +9,10 @@ from PyQt6.QtWidgets import (
 
 
 class WarningDialog(QDialog):
-    def __init__(self, parent, warningList):
+    def __init__(self, parent, warningList, labelText: str):
         super().__init__(parent=parent)
         self.warningList = warningList
+        self.labelText = labelText
         self.setMinimumWidth(350)
         self._setWindowPersonalization()
         self.setWindowIcon(QIcon('../../../resources/icons/warning-icon.png'))
@@ -28,7 +29,7 @@ class WarningDialog(QDialog):
         self.exec()
 
     def _createContent(self):
-        labelTip = QLabel('Zapobiegnięto kolizji nazw w folderze docelowym!')
+        labelTip = QLabel(self.labelText)
         labelTip.setProperty('class', 'warningMessage')
         self.layout().addWidget(labelTip)
         if self.warningList:

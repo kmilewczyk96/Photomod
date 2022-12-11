@@ -76,10 +76,20 @@ class Controller:
         # Execute button:
         self._view.executeDiv.submitBtn.clicked.connect(self._executeOperations)
 
-    def _createWarningDialog(self, warningListItems: list):
+    def _createFilesWarningDialog(self, warningListItems: list):
         self._setVisible(False)
         warningList = WarningList(warningListItems=warningListItems)
-        self.warningDialog = WarningDialog(parent=self._view, warningList=warningList)
+        self.warningDialog = WarningDialog(parent=self._view, warningList=warningList,
+                                           labelText="Zapobiegnięto kolizji nazw w folderze docelowym!")
+        self.warningDialog.errorBtn.clicked.connect(self.warningDialog.hide)
+        self.warningDialog.errorBtn.clicked.connect(partial(self._setVisible, True))
+        self.warningDialog.errorBtn.clicked.connect(self._switchToExecution)
+        self.warningDialog.show()
+
+    def _createIndexesWarningDialog(self):
+        self._setVisible(False)
+        self.warningDialog = WarningDialog(parent=self._view, warningList=None,
+                                           labelText="Za mało wolnych indexów dla tego prefixu!")
         self.warningDialog.errorBtn.clicked.connect(self.warningDialog.hide)
         self.warningDialog.errorBtn.clicked.connect(partial(self._setVisible, True))
         self.warningDialog.errorBtn.clicked.connect(self._switchToExecution)
@@ -105,7 +115,8 @@ class Controller:
         self.worker.finished.connect(self.worker.deleteLater)
         self.worker.finished.connect(self._switchToConfirmation)
         self.worker.progress.connect(self._updateProgress)
-        self.worker.filenamesError.connect(self._createWarningDialog)
+        self.worker.filenamesError.connect(self._createFilesWarningDialog)
+        self.worker.indexesError.connect(self._createIndexesWarningDialog)
 
         self.thread.start()
 
@@ -146,10 +157,6 @@ class Controller:
         self._model.rotateIndex = group.checkedId()
 
     def _switchToConfirmation(self, isSuccessful: bool):
-        if isSuccessful:
-            print('Successful')
-        else:
-            print('aborted!')
         self._view.executeDiv.progressBarDiv.barFilled(bool_=True)
 
     def _switchToExecution(self):

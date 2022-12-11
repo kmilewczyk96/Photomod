@@ -11,6 +11,7 @@ class ImageWorker(QObject):
     progress = pyqtSignal(int)
     currentOperation = pyqtSignal(str)
     filenamesError = pyqtSignal(list)
+    indexesError = pyqtSignal()
 
     def __init__(self, model):
         super().__init__()
@@ -29,8 +30,16 @@ class ImageWorker(QObject):
         self.pillowRequired = True if self.ROTATE or self.RESOLUTION else False
 
     def run(self) -> None:
-        # Check if there are no collisions with existing files in target dir:
-        if not self.RENAME:
+        if self.RENAME:
+            # Check if there are enough free indexes for operation:
+            sufficientIndexes = self._checkForQuantity()
+            if not sufficientIndexes:
+                self.indexesError.emit()
+                self.finished.emit(False)
+                return
+
+        else:
+            # Check if there are no collisions with existing files in target dir:
             collisions = self._checkForCollisions()
             if collisions:
                 self.filenamesError.emit(collisions)
@@ -68,6 +77,8 @@ class ImageWorker(QObject):
             with Image.open(img) as original:
                 original.load()
 
+            exif = original.getexif()
+
             if self.RESOLUTION:
                 max_ = self.RESOLUTIONS[self.RESOLUTION_INDEX]
                 originalSize = max(original.size)
@@ -83,7 +94,7 @@ class ImageWorker(QObject):
             else:
                 newName = os.path.basename(img)
 
-            original.save(os.path.join(self.TARGET_PATH, newName), quality=95, subsampling=0)
+            original.save(os.path.join(self.TARGET_PATH, newName), quality=95, subsampling=0, exif=exif)
             original.close()
             self.progress.emit(index + 1)
 
@@ -102,6 +113,15 @@ class ImageWorker(QObject):
                 collisions.append(img)
 
         return collisions
+
+    def _checkForQuantity(self) -> bool:
+        """
+        Checks if there are enough free indexes to complete the task.
+        """
+        if 100000 - len(self.FILES) - self.nextIndex <= 0:
+            return False
+
+        return True
 
     def _nextName(self):
         self.nextIndex += 1
