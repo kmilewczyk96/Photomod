@@ -42,9 +42,12 @@ class Controller:
         self._model.nextIndex = nextFreeIndex
 
         self._view.renameTipBox.info.setText('Pierwszy wolny index:')
-        self._view.renameTipBox.details.setText(
-            f'{self._model.prefix}{str(self._model.nextIndex + 1).zfill(5)}.jpg'
-        )
+        if nextFreeIndex != 99999:
+            self._view.renameTipBox.details.setText(
+                f'{self._model.prefix}{str(self._model.nextIndex + 1).zfill(5)}.jpg'
+            )
+        else:
+            self._view.renameTipBox.details.setText('Brak wolnych indexów!')
 
     def _connectSignalsAndSlots(self):
         # File buttons:

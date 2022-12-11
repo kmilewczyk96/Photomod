@@ -32,6 +32,6 @@ class Model:
             return int(lastIndex.split(self.prefix)[-1].split('.')[0])
 
     def runOperations(self):
-        if not isinstance(self.nextIndex, int) and self.rename:
+        if self.rename:
             self.nextIndex = self.checkExistingPrefixes()
 
